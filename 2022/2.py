@@ -19,8 +19,6 @@ points = sum(
 )
 print(f"According to assumed strategy your points will be: {points}")
 
-print("-" * 55)
-
 points = sum(
     [
         {

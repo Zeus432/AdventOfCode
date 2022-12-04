@@ -9,10 +9,8 @@ max_vals = sorted(calories, key=calories.get, reverse=True)[:3]
 
 print(f"Fairy {max_vals[0]} is carrying the most calories - {calories[max_vals[0]]}")
 
-print("-" * 55)
-
 sum = 0
-print("Top 3 Fairies:")
+print("\nTop 3 Fairies:")
 for i in max_vals:
     print(f"Fairy {i} - {calories[i]}")
     sum += calories[i]
