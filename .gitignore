@@ -1,4 +1,5 @@
 *.txt
 *.in
+test.py
 .DS_Store
 .vscode
