@@ -2,42 +2,53 @@ with open("2023\\3.txt") as fl:
     lines = fl.read().strip().split("\n")
 
 
-def check_surroundings(lines: list, line_index: int, start: int, end: int) -> bool:
+def check_surroundings(
+    lines: list, line_index: int, start: int, end: int
+) -> list[str, list[int, int]] | bool:
     surround = []
     current = lines[line_index]
 
-    surround.extend(
-        [
-            "." if start == 0 else current[start - 1],
-            "." if end == len(current) - 1 else current[end + 1],
-        ]
-    )  # add value before and after value in current line
+    if start != 0:  # add values on current line before current value
+        surround.append([current[start - 1], [line_index, start - 1]])
 
-    surround.append(
-        "."
-        if line_index == 0
-        else lines[line_index - 1][
-            (0 if start == 0 else start - 1) : end
-            + (1 if end == len(current) - 1 else 2)
-        ]
-    )  # add previous line surrounding value
+    if end != len(current) - 1:  # add values on current line after current value
+        surround.append([current[end + 1], [line_index, end + 1]])
 
-    surround.append(
-        "."
-        if line_index == len(lines) - 1
-        else lines[line_index + 1][
-            (0 if start == 0 else start - 1) : end
-            + (1 if end == len(current) - 1 else 2)
-        ]
-    )  # add next line surrounding value
+    if line_index != 0:  # add surrounding values on previous line to current value
+        for i in range(
+            0 if start == 0 else start - 1, end + (1 if end == len(current) - 1 else 2)
+        ):
+            surround.append([lines[line_index - 1][i], [line_index - 1, i]])
 
-    for char in "".join(surround):
+    # fmt: off
+    if line_index != len(lines) - 1:  # add surrounding values on next line to current value # fmt: on
+        for i in range(
+            0 if start == 0 else start - 1, end + (1 if end == len(current) - 1 else 2)
+        ):
+            surround.append([lines[line_index + 1][i], [line_index + 1, i]])
+
+    for valset in surround:
+        char = valset[0]
+        index = valset[1]
+
         if char.isdigit() is False and char != ".":
-            return True
+            return [char, index]
     return False
 
 
-net = 0
+def search_gears(
+    gear: list, value: str, match: str, x: int, y: int, val: int = 0
+) -> int:
+    for valset in gear:
+        if valset[1:4] == [match, x, y]:
+            val = int(valset[0]) * int(value)
+    gear.append([value, match, x, y])
+    return val
+
+
+part = 0
+gear = []
+gear_ratio = 0
 
 for index, line in enumerate(lines):
     nxt = -999  # idk man i just like this number
@@ -49,22 +60,24 @@ for index, line in enumerate(lines):
             if line[i + n].isdigit() is not True:
                 val = line[i : i + n]
                 nxt = i + n
-                net += (
-                    int(val)
-                    if check_surroundings(lines, index, i, i + n - 1) is True
-                    else 0
-                )
+                if (
+                    valset := check_surroundings(lines, index, i, i + n - 1)
+                ) is not False:
+                    part += int(val)
+                    gear_ratio += search_gears(
+                        gear, val, valset[0], valset[1][0], valset[1][1]
+                    )
                 break
 
             elif (i + n) == (len(line) - 1):
                 val = line[i : len(line)]
                 nxt = i + n
-                check_surroundings(lines, index, i, i + n)
-                net += (
-                    int(val)
-                    if check_surroundings(lines, index, i, i + n) is True
-                    else 0
-                )
+                if (valset := check_surroundings(lines, index, i, i + n)) is not False:
+                    part += int(val)
+                    gear_ratio += search_gears(
+                        gear, val, valset[0], valset[1][0], valset[1][1]
+                    )
                 break
 
-print(net)
+print(f"Sum of all part numbers: {part}")
+print(f"Sum of all gear ratios: {gear_ratio}")
