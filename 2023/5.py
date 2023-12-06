@@ -1,61 +1,21 @@
 with open("2023\\5.txt") as fl:
-    lines = fl.read().strip().split("\n")
+    pointers, *lines = fl.read().strip().split("\n\n")
+    pointers = list(map(int, pointers.split(":")[1].split()))
 
-    directory = {}
+for line in lines:
+    new_pointer = []
+    block = [list(map(int, x.split())) for x in line.splitlines()[1:]]
 
-    for index, line in enumerate(lines):
-        if line.startswith("seeds:"):
-            directory.update(
-                {
-                    "seeds": [
-                        int(seed) for seed in line.split("seeds: ", 1)[1].split(" ")
-                    ]
-                }
-            )
+    for point in pointers:
+        for destination, source, step in block:
+            if point in range(source, source + step):
+                new_pointer.append(destination + point - source)
+                break
+        else:
+            new_pointer.append(point)
 
-        elif ":" in line:
-            _list = []
-            for i in range(1, len(lines)):
-                if (
-                    index + i < len(lines)
-                    and ":" not in (x := lines[index + i])
-                    and x != ""
-                ):
-                    _list.append([int(num) for num in x.split(" ")])
-                else:
-                    directory.update({line[:-5]: _list})
-                    break
-
-
-def link(directory: dict, source: str, destination: str, value: int) -> int:
-    for maps in directory[source + "-to-" + destination]:
-        if value in (x := range(maps[1], maps[1] + maps[2])):
-            return maps[0] + x.index(value)
-
-    return value
-
-
-seed_map = []
-values = [
-    "seed",
-    "soil",
-    "fertilizer",
-    "water",
-    "light",
-    "temperature",
-    "humidity",
-    "location",
-]
-
-
-for seed in directory["seeds"]:
-    _info = {"seed": seed}
-    for x in range(len(values) - 1):
-        _info.update(
-            {values[x + 1]: link(directory, values[x], values[x + 1], _info[values[x]])}
-        )
-    seed_map.append(_info)
+    pointers = new_pointer
 
 # fmt: off
-print(f"Lowest location corresponding to initial seed numbers: {min([seed['location'] for seed in seed_map])}")
+print(f"Lowest location corresponding to initial seed numbers: {min(pointers)}")
 # fmt: on
