@@ -19,6 +19,21 @@ def counter(cards: str):
     return 0
 
 
+def replacements(hand):
+    if hand == "":
+        return [""]
+
+    return [
+        x + y
+        for x in ("23456789TQKA" if hand[0] == "J" else hand[0])
+        for y in replacements(hand[1:])
+    ]
+
+
+def classify(hand):
+    return max(map(counter, replacements(hand)))
+
+
 def preference(cards: str):
     return (counter(cards), [card_map.get(card, card) for card in cards])
 
@@ -30,3 +45,20 @@ for rank, (cards, bid) in enumerate(lines, 1):
     net += rank * int(bid)
 
 print(f"Total winnings: {net}")
+
+
+def preference(cards: str):
+    return (classify(cards), [card_map.get(card, card) for card in cards])
+
+
+lines.sort(key=lambda line: preference(line[0]))
+
+
+net = 0
+for rank, (cards, bid) in enumerate(lines, 1):
+    net += rank * int(bid)
+
+print(f"Total winnings (joker): {net}")
+
+
+# Figure it out
