@@ -4,35 +4,29 @@ def max_joltage(lines):
 
     for line in lines:
         max1 = 0
-        max2 = -1
+        max2 = ""
         start = 0
-        cache = ""
 
         for index, a in enumerate(line):
-            for b in line[index+1:]:
-                if (c := int(a+b)) > max1:
+            for b in line[index + 1 :]:
+                if (c := int(a + b)) > max1:
                     max1 = c
-    
 
         for gap in range(12, 0, -1):
-            if (-gap)+1 < 0:
-                work = line[start:(-gap)+1]
-            else:
-                work = line[start:]
+            work = line[start : (-gap) + 1] if (-gap) + 1 < 0 else line[start:]
 
-            max2 = -1
+            cache = -1
 
             for index, x in enumerate(work):
-                if int(x) > max2:
-                    max2 = int(x)
-                    temp = index+1
+                if int(x) > cache:
+                    cache = int(x)
+                    temp = index + 1
 
             start += temp
-            cache += str(max2)
-
+            max2 += str(cache)
 
         jolt1 += max1
-        jolt2 += int(cache)
+        jolt2 += int(max2)
 
     return jolt1, jolt2
 
