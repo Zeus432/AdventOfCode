@@ -19,6 +19,7 @@ def count_valid(lines):
                 else:
                     cache += i
     
+    
     return invalid1, invalid2
 
 
