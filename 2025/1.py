@@ -2,6 +2,7 @@ def count_zeros(lines, start=50):
     num = start
     count1 = 0
     count2 = 0
+    limit = 0
 
     for direction, val in lines:
 

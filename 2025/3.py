@@ -6,6 +6,7 @@ def max_joltage(lines):
         max1 = 0
         max2 = ""
         start = 0
+        temp = 0
 
         for index, a in enumerate(line):
             for b in line[index + 1 :]:
