@@ -9,7 +9,7 @@ class Day2:
         self.powers = [10 ** (l) for l in range(len(str(self.lines[-1][1])) + 1)]
 
     def load_input(self):
-        with open("2025\\2.txt") as fl:
+        with open("2025\\02.txt") as fl:
             self.lines = sorted(
                 [[int(j) for j in i.split("-")] for i in fl.read().strip().split(",")]
             )

@@ -7,7 +7,7 @@ class Day8:
         self.load_input()
     
     def load_input(self):
-        with open("2025\\8.txt") as fl:
+        with open("2025\\08.txt") as fl:
             self.lines = fl.read().strip().split("\n")
     
     def part_one(self):

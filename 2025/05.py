@@ -11,7 +11,7 @@ class Day5:
         self.ids = sorted([int(x) for x in self.lines[1]])
 
     def load_input(self):
-        with open("2025\\5.txt") as fl:
+        with open("2025\\05.txt") as fl:
             self.lines = [i.split("\n") for i in fl.read().strip().split("\n\n")]
 
     def resolve_ranges(self):

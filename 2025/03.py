@@ -10,7 +10,7 @@ class Day3:
         self.ranges = []
 
     def load_input(self):
-        with open("2025\\3.txt") as fl:
+        with open("2025\\03.txt") as fl:
             self.lines = fl.read().strip().split("\n")
 
     def part_one(self):

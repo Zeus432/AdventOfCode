@@ -8,7 +8,7 @@ class Day1:
         self.start = 50
 
     def load_input(self):
-        with open("2025\\1.txt") as fl:
+        with open("2025\\01.txt") as fl:
             self.lines = [[i[0], int(i[1:])] for i in fl.read().strip().split("\n")]
 
     def solve(self, start=50, quiet=False):

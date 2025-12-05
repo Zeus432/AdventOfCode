@@ -19,7 +19,7 @@ class Day4:
         ]
 
     def load_input(self):
-        with open("2025\\4.txt") as fl:
+        with open("2025\\04.txt") as fl:
             self.lines = [list(i) for i in fl.read().strip().split("\n")]
 
     def check_surroundings(self, x, y):
