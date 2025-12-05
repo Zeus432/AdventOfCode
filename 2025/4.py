@@ -1,14 +1,13 @@
-class Forklift:
-    def __init__(self, lines: list, cycles: int = 1):
-        self.lines = lines
-        self.cycles = cycles
-        self.limits = [len(lines[0]), len(lines)]
-        self.accessible = 0
-        self.overall = 0
+import time
 
-    def check_surroundings(self, x, y):
-        counter = 0
-        surr_coords = [
+
+class Day4:
+    def __init__(self):
+        self._start = time.perf_counter()
+        self.load_input()
+        self.limits = [len(self.lines[0]), len(self.lines)]
+        self.overall = 0
+        self.surr_coords = [
             [-1, -1],
             [-1, 0],
             [-1, 1],
@@ -19,19 +18,24 @@ class Forklift:
             [1, 1],
         ]
 
+    def load_input(self):
+        with open("2025\\4.txt") as fl:
+            self.lines = [list(i) for i in fl.read().strip().split("\n")]
+
+    def check_surroundings(self, x, y):
+        counter = 0
+        limits = self.limits
+        surr_coords = self.surr_coords
+
         for b, a in surr_coords:
-            if (
-                x + a >= 0
-                and x + a < self.limits[0]
-                and y + b >= 0
-                and y + b < self.limits[1]
-            ):
-                if self.lines[y + b][x + a] in ["@", "x"]:
+            if x + a >= 0 and x + a < limits[0] and y + b >= 0 and y + b < limits[1]:
+                if self.lines[y + b][x + a] == "@":
                     counter += 1
 
-        if counter < 4:
-            self.lines[y][x] = "x"
-            self.accessible += 1
+                    if counter > 3:
+                        return False
+
+        return True
 
     def clean_grid(self):
         for y, line in enumerate(self.lines):
@@ -39,28 +43,39 @@ class Forklift:
                 if roll == "x":
                     self.lines[y][x] = "."
 
-        self.accessible = 0
-
     def part_one(self):
-        for y, line in enumerate(self.lines):
+        lines = self.lines
+        to_remove = []
+        for y, line in enumerate(lines):
             for x, roll in enumerate(line):
-                if roll == "@":
-                    self.check_surroundings(x, y)
+                if roll == "@" and self.check_surroundings(x, y):
+                    to_remove.append((x, y))
 
-        return self.accessible
+        for x, y in to_remove:
+            lines[y][x] = "x"
+
+        self.overall += len(to_remove)
+        return len(to_remove)
 
     def part_two(self):
+        overall = self.overall
         while (removed := self.part_one()) > 0:
-            self.overall += removed
+            overall += removed
+            # print(removed)
             self.clean_grid()
 
-        return self.overall
+        return overall
+
+    def solve(self, quiet=False):
+        if not quiet:
+            print("Part 1:", self.part_one())
+            print("Part 2:", self.part_two())
+            print(f"Runtime: {(time.perf_counter() - self._start) * 1000:.3f} ms")
 
 
-with open("2025\\4.txt") as fl:
-    lines = [list(i) for i in fl.read().strip().split("\n")]
+Day4().solve()
 
-grid = Forklift(lines)
-part1, part2 = grid.part_one(), grid.part_two()
-print("Part 1:", part1)
-print("Part 2:", part2)
+"""
+import timeit
+print(f"{timeit.timeit("Day4().solve(quiet=True)", globals=globals(), number=1000):.3f} ms per run")
+"""  # Average runtime over 1000 runs
