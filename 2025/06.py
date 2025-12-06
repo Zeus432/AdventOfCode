@@ -39,19 +39,20 @@ class Day6:
 
         for index, ope in enumerate(operators):
             cache = 0 if ope == "+" else 1
+            work = [int(x.strip()) for x in lines[index]]
 
-            for val in lines[index]:
+            for val in work:
                 if ope == "+":
-                    cache += int(val.strip())
+                    cache += val
                 else:
-                    cache *= int(val.strip())
+                    cache *= val
 
             total += cache
 
         return total
 
     def part_two(self):
-        lines: list[str] = self.lines
+        lines = self.lines
         operators = self.operators
         total = 0
 
