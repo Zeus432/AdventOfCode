@@ -11,7 +11,7 @@ class Day1:
         with open("2025\\01.txt") as fl:
             self.lines = [[i[0], int(i[1:])] for i in fl.read().strip().split("\n")]
 
-    def solve(self, start=50, quiet=False):
+    def part_one_and_two(self, start=50):
         lines = self.lines
         count1 = 0
         count2 = 0
@@ -34,10 +34,15 @@ class Day1:
 
             if num == 0:
                 count1 += 1
+        
+        return count1, count2
+    
+    def solve(self, start=50, quiet=False):
+        solution = self.part_one_and_two(start)
 
         if not quiet:
-            print("Part 1:", count1)
-            print("Part 2:", count2)
+            print("Part 1:", solution[0])
+            print("Part 2:", solution[1])
             print(f"Runtime: {(time.perf_counter() - self._start) * 1000:.3f} ms")
 
 
