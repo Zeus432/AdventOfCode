@@ -74,7 +74,7 @@ class Day8:
 
 Day8().solve()
 
-
+"""
 import timeit
-print(f"{timeit.timeit("Day8().solve(quiet=True)", globals=globals(), number=100):.3f} ms per run")
-  # Average runtime over 1000 runs
+print(f"{timeit.timeit("Day8().solve(quiet=True)", globals=globals(), number=1000):.3f} ms per run")
+"""  # Average runtime over 1000 runs
