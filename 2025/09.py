@@ -1,21 +1,37 @@
 import time
+from itertools import combinations
 
 
 class Day9:
     def __init__(self):
         self._start = time.perf_counter()
         self.load_input()
-    
+
     def load_input(self):
         with open("2025\\09.txt") as fl:
-            self.lines = fl.read().strip().split("\n")
-    
+            self.lines = sorted(
+                [
+                    list(map(lambda n: int(n), coords.split(",")))
+                    for coords in fl.read().strip().split("\n")
+                ]
+            )
+
     def part_one(self):
-        return 0
+        lines = self.lines
+        marea = 0
+
+        for (x1, y1), (x2, y2) in combinations(lines, 2):
+            area = (abs(x2 - x1) + 1) * (abs(y2 - y1) + 1)
+
+            if area > marea:
+                marea = area
+
+        return marea
 
     def part_two(self):
+        lines = self.lines
         return 0
-    
+
     def solve(self, quiet=False):
         if not quiet:
             print("Part 1:", self.part_one())
